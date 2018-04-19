@@ -21,7 +21,7 @@ sudo apt-get install xfce4 xfce4-goodies
 vncserver
 ```
 
-Then test a connection to `<host>:5901` from your machine by a VNC client. These steps inspired by https://medium.com/google-cloud/linux-gui-on-the-google-cloud-platform-800719ab27c5, if you catch any issue try read the article first.
+Then test a connection to `<host>:5901` from your machine by a VNC client. These steps inspired by https://medium.com/google-cloud/linux-gui-on-the-google-cloud-platform-800719ab27c5, if you catch any issue try to read the article first.
 
 Next, create an user to run the container, "monitor" for example. The user should have UID 1000 because it will map to the container where UID 1000 is used for running MetaTrader app. The user should be sudoer to start privileged container.
 
@@ -36,14 +36,18 @@ Then set a password to the user to access `sudo` command: `passwd monitor`.
 Give access to X Server for the user:
 ```bash
 export DISPLAY=:1
-xhost local
 xhost +localhost
-xhost +si:localuser:monitor
 ```
 
 ## Run the container
 
-Login by user monitor and type:
+Login by root and build the container:
+
+```bash
+docker build -t myfxbook .
+```
+
+Login by user "monitor" and type:
 
 ```bash
 sudo docker run -it --rm \
@@ -52,7 +56,7 @@ sudo docker run -it --rm \
     -e DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
     -v /path/to/prepared/mt4/distro:/home/winer/drive_c/mt4 \
-    axiory-myfxbook
+    myfxbook
 ```
 
-You can use `-d` parameter instead of `-it` to move the process in background.
+You can use `-d` parameter instead of `-it` to move the process to background.
