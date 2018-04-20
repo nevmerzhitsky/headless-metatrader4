@@ -47,6 +47,7 @@ WORKDIR $HOME
 
 ENV WINEARCH=win32
 ENV WINEPREFIX=$HOME/.wine
+ENV MT4DIR=$WINEPREFIX/drive_c/mt4
 
 # @TODO Install actual versions of Mono and Gecko dynamically
 ADD cache $HOME/.cache
@@ -67,6 +68,6 @@ RUN set -ex; \
     winetricks --unattended dotnet_verifier; \
     /docker/waitonprocess.sh wineserver
 
-WORKDIR $WINEPREFIX/drive_c/mt4
+WORKDIR $MT4DIR
 
 ENTRYPOINT ["wine", "terminal", "/portable", "myfxbook_ea.ini"]
