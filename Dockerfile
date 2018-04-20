@@ -34,6 +34,9 @@ RUN set -ex; \
 
 ARG USER=winer
 ARG HOME=/home/$USER
+# To access the values from children containers.
+ENV USER=$USER \
+    HOME=$HOME
 
 RUN set -ex; \
     groupadd $USER;\
@@ -44,8 +47,6 @@ WORKDIR $HOME
 
 ENV WINEARCH=win32
 ENV WINEPREFIX=$HOME/.wine
-# To access the value from children containers.
-ENV USER=$USER
 
 # @TODO Install actual versions of Mono and Gecko dynamically
 ADD cache $HOME/.cache
