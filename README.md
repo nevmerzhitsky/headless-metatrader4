@@ -14,31 +14,72 @@ This image has all dependencies which required to run MetaTrader 4 Terminal with
 
 ## Setup host system
 
-Unfortunately, MetaTrader 4 can't work without real GUI (X Server) thus you should install an desktop application in the host OS. Let's do it with Xfce and TightVNC.
+Unfortunately, MetaTrader 4 can't work without real GUI desktop, thus you should install an desktop application in the host OS. Let's do it with Xfce and TightVNC.
 
 ```bash
 sudo apt-get update
 sudo apt-get install tightvncserver xfce4 xfce4-goodies
-vncserver
+vncserver :1
 ```
 
-Then test a connection to `<host>:5901` from your machine by a VNC client. These steps inspired by https://medium.com/google-cloud/linux-gui-on-the-google-cloud-platform-800719ab27c5, if you catch any issue try to read the article first.
+Set a password for connection and test the connection to `<host>:5901` from your machine by a VNC client. These steps inspired by https://medium.com/google-cloud/linux-gui-on-the-google-cloud-platform-800719ab27c5, if you catch any issue try to read the article first.
+
+Stop the vncserver because we will create a service soon: `vncserver -kill :1`.
 
 Next, create an user to run the container, "monitor" for example. The user should have UID 1000 because it will map to the container where UID 1000 is used for running MetaTrader app. The user should be sudoer to start privileged container.
 
 ```bash
-useradd -u 1000 -mU monitor
+useradd -u 1000 -s /bin/bash -mU monitor
 adduser monitor sudo
-passwd -d monitor
 ```
 
-Then set a password to the user to access `sudo` command: `passwd monitor`.
+Then set a password for the user to access `sudo` command: `passwd monitor`.
 
-Give access to X Server for the user:
+Let's create a service to start VNC server automatically after reboot. Copy the following into `/etc/init.d/vncserver`:
+
 ```bash
-export DISPLAY=:1
-xhost +localhost
+#!/bin/sh -e
+### BEGIN INIT INFO
+# Provides:          vncserver
+# Required-Start:    networking
+# Required-Stop:
+# Default-Start:     3 4 5
+# Default-Stop:      0 6
+### END INIT INFO
+
+# The username:group that will run VNC
+export USER="root"
+
+# The display that VNC will use
+DISPLAY=":1"
+# The Desktop geometry to use.
+GEOMETRY="1024x768"
+
+OPTIONS="-geometry ${GEOMETRY} ${DISPLAY}"
+
+. /lib/lsb/init-functions
+
+case "$1" in
+start)
+    log_action_begin_msg "Starting vncserver for user '${USER}' on ${DISPLAY}"
+    su ${USER} -c "/usr/bin/vncserver ${OPTIONS}"
+    # Give access to X Server for other users
+    su ${USER} -c "DISPLAY=${DISPLAY} xhost +localhost"
+    ;;
+stop)
+    log_action_begin_msg "Stoping vncserver for user '${USER}' on ${DISPLAY}"
+    su ${USER} -c "/usr/bin/vncserver -kill ${DISPLAY}"
+    ;;
+restart)
+    $0 stop
+    $0 start
+    ;;
+esac
+
+exit 0
 ```
+
+Make the script executable with `chmod +x /etc/init.d/vncserver`. Then run `update-rc.d vncserver defaults`. And finally `/etc/init.d/vncserver start`. These steps inspired by http://www.abdevelopment.ca/blog/start-vnc-server-ubuntu-boot/, if you catch any issue try to read the article first.
 
 ## Run the container
 
@@ -54,7 +95,7 @@ Login by user "monitor" and type:
 sudo docker run -it --rm \
     --privileged \
     -u $UID \
-    -e DISPLAY \
+    -e :1 \
     -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
     -v /path/to/prepared/mt4/distro:/home/winer/drive_c/mt4 \
     myfxbook
