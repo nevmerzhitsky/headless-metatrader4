@@ -103,7 +103,7 @@ sudo docker run -it --rm \
 
 You can use `-d` parameter instead of `-it` to move the process to background.
 
-Base image is Ubuntu, therefore to start a shell you should add `--entry-point bash` parameter to the `docker run` command.
+Base image is Ubuntu, therefore if you want to debug the container then add `--entry-point bash` parameter to the `docker run` command.
 
 ## Extend image
 
