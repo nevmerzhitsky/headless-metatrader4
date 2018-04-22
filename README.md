@@ -92,7 +92,7 @@ Login by user "monitor" and type:
 ```bash
 docker run -it --rm \
     -u $UID \
-    -e :1 \
+    -e DISPLAY=:1 \
     -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
     -v /path/to/prepared/mt4/distro:/home/winer/.wine/drive_c/mt4 \
     myfxbook
@@ -105,3 +105,18 @@ Base image is Ubuntu, therefore if you want to debug the container then add `--e
 ## Extend image
 
 You can make your own `Dockerfile` inherited from this image and copy a particular distribution of MetaTrader 4 Terminal to image on build phase. For this task env variables `$USER` and `$MT4DIR` are acceptable.
+
+
+## Troubleshooting
+
+If you see this error in the container logs:
+
+```
+X Error of failed request:  BadAccess (attempt to access private resource denied)
+  Major opcode of failed request:  129 (MIT-SHM)
+  Minor opcode of failed request:  3 (X_ShmPutImage)
+  Serial number of failed request:  458
+  Current serial number in output stream:  458
+```
+
+Then try to add `--ipc=host` parameter to the `docker run` command due to [a comment](https://github.com/osrf/docker_images/issues/21#issuecomment-239334515). But this decrease security, thus do it at your own risk.
