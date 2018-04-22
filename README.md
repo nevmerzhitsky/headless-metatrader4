@@ -14,7 +14,7 @@ This image has all dependencies which required to run MetaTrader 4 Terminal with
 
 ## Setup host system
 
-Unfortunately, MetaTrader 4 can't work without real GUI desktop, thus you should install an desktop application in the host OS. Let's do it with Xfce and TightVNC.
+Unfortunately, MetaTrader 4 can't work without real GUI desktop, thus you should install an desktop application in the host OS. Let's do it with Xfce and TightVNC. And fortunately, cheapest droplet of DigitalOcean ($5/mon) is enough for running the task. If you haven't account in DigitalOcean you can register by my referral [link](https://m.do.co/c/8a6e11b01bba) to get $10 credit.
 
 ```bash
 sudo apt-get update
