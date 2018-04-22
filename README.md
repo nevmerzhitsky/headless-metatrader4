@@ -97,7 +97,7 @@ sudo docker run -it --rm \
     -u $UID \
     -e :1 \
     -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
-    -v /path/to/prepared/mt4/distro:/home/winer/drive_c/mt4 \
+    -v /path/to/prepared/mt4/distro:/home/winer/.wine/drive_c/mt4 \
     myfxbook
 ```
 
