@@ -22,7 +22,7 @@ sudo apt-get install tightvncserver xfce4 xfce4-goodies
 vncserver :1
 ```
 
-Set a password for connection and test the connection to `<host>:5901` from your machine by a VNC client. These steps inspired by https://medium.com/google-cloud/linux-gui-on-the-google-cloud-platform-800719ab27c5, if you catch any issue try to read the article first.
+Set a password for connection and test the connection to `<host>:5901` from your machine by a VNC client. These steps inspired by [an article](https://medium.com/google-cloud/linux-gui-on-the-google-cloud-platform-800719ab27c5), if you catch any issue try to read the article first.
 
 Stop the vncserver because we will create a service soon: `vncserver -kill :1`.
 
@@ -79,7 +79,7 @@ esac
 exit 0
 ```
 
-Make the script executable with `chmod +x /etc/init.d/vncserver`. Then run `update-rc.d vncserver defaults`. And finally `/etc/init.d/vncserver start`. These steps inspired by http://www.abdevelopment.ca/blog/start-vnc-server-ubuntu-boot/, if you catch any issue try to read the article first.
+Make the script executable with `chmod +x /etc/init.d/vncserver`. Then run `update-rc.d vncserver defaults`. And finally `/etc/init.d/vncserver start`. These steps inspired by [an article](http://www.abdevelopment.ca/blog/start-vnc-server-ubuntu-boot/), if you catch any issue try to read the article first.
 
 ## Run the container
 
