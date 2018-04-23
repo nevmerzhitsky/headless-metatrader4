@@ -91,12 +91,15 @@ Login by user "monitor" and type:
 
 ```bash
 docker run -it --rm \
+    --privileged \
     -u $UID \
     -e DISPLAY=:1 \
     -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
     -v /path/to/prepared/mt4/distro:/home/winer/.wine/drive_c/mt4 \
     myfxbook
 ```
+
+It's strange to me but without `--privileged` parameter you will can't add EAs and scripts to charts! Maybe this parameter can be replaced by more particular `--cap-add` but I didn't investigate this still. You can find some details [here](https://github.com/mviereck/x11docker).
 
 You can use `-d` parameter instead of `-it` to move the process to background.
 
