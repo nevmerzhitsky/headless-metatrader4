@@ -26,7 +26,7 @@ Set a password for connection and test the connection to `<host>:5901` from your
 
 Stop the vncserver because we will create a service soon: `vncserver -kill :1`.
 
-Next, create an user to run the container, "monitor" for example. The user should have UID 1000 because it will map to the container where UID 1000 is used for running MetaTrader app. The user should be in docker to run the container.
+Next, create an user to run the container, "monitor" for example. The user should have UID 1000 because it will map to the container where UID 1000 is used for running MetaTrader app. The user should be in "docker" group to run the container.
 
 ```bash
 useradd -u 1000 -s /bin/bash -mU monitor
