@@ -5,16 +5,16 @@ This image has all dependencies which required to run MetaTrader 4 Terminal with
 ## Prepare distribution with MetaTrader 4
 
 1. Install appropriate (branded) MT4 terminal locally and close it if opened after installation
-1. Run it with [`/portable`](https://www.metatrader4.com/en/trading-platform/help/userguide/start_comm) argument to create structure of Data directory inside the directory with the terminal
+1. Run it with [`/portable`](https://www.metatrader4.com/en/trading-platform/help/userguide/start_comm) argument to create a structure of Data directory inside the directory with the terminal
 1. Close the terminal
 1. Delete all temporary and unrequired files from the directory with the terminal (`metaeditor.exe`, `terminal.ico`, `Sounds` dir, log files, etc)
 1. Edit a file `myfxbook_ea-example.ini` (only Login, Password, Server fields usually) and save it in the root of the directory of the terminal by name `myfxbook_ea.ini`
 1. Edit a file `Myfxbook-example.set` and save it in directory `MQL4/Presets/` of the terminal by name `Myfxbook.set`
-1. If you plan extend the `Dockerfile` and add the terminal to the image on build step, then make `mt4.tar.bz2` file by any appropriate tool. E.g. `tar cfj ../mt4.tar.bz2 *`. Make sure that no root folder is exist in the archive.
+1. If you plan to extend the `Dockerfile` and add the terminal to the image on build step, then make `mt4.tar.bz2` file by any appropriate tool. E.g. `tar cfj ../mt4.tar.bz2 *`. Make sure that no root folder exists in the archive.
 
 ## Setup host system
 
-Unfortunately, MetaTrader 4 can't work without real GUI desktop, thus you should install an desktop application in the host OS. Let's do it with Xfce and TightVNC. And fortunately, cheapest droplet of DigitalOcean ($5/mon) is enough for running the task. If you haven't account in DigitalOcean you can register by my referral [link](https://m.do.co/c/8a6e11b01bba) to get $10 credit.
+Unfortunately, MetaTrader 4 can't work without real GUI desktop, thus you should install a desktop application in the host OS. Let's do it with Xfce and TightVNC. And fortunately, the cheapest droplet of DigitalOcean ($5/mon) is enough for running the task. If you haven't account in DigitalOcean you can register by my referral [link](https://m.do.co/c/8a6e11b01bba) to get $10 credit.
 
 ```bash
 sudo apt-get update
@@ -26,7 +26,7 @@ Set a password for connection and test the connection to `<host>:5901` from your
 
 Stop the vncserver because we will create a service soon: `vncserver -kill :1`.
 
-Next, create an user to run the container, "monitor" for example. The user should have UID 1000 because it will map to the container where UID 1000 is used for running MetaTrader app. The user should be in "docker" group to run the container.
+Next, create a user to run the container, "monitor" for example. The user should have UID 1000 because it will map to the container where UID 1000 is used for running MetaTrader app. The user should be in docker to run the container.
 
 ```bash
 useradd -u 1000 -s /bin/bash -mU monitor
@@ -100,11 +100,11 @@ docker run -it --rm \
 
 You can use `-d` parameter instead of `-it` to move the process to background.
 
-Base image is Ubuntu, therefore if you want to debug the container then add `--entry-point bash` parameter to the `docker run` command.
+A base image is Ubuntu, therefore if you want to debug the container then add `--entry-point bash` parameter to the `docker run` command.
 
 ## Extend image
 
-You can make your own `Dockerfile` inherited from this image and copy a particular distribution of MetaTrader 4 Terminal to image on build phase. For this task env variables `$USER` and `$MT4DIR` are acceptable.
+You can make your own `Dockerfile` inherited from this image and copy a particular distribution of MetaTrader 4 Terminal to image on build phase. For this task, env variables `$USER` and `$MT4DIR` are acceptable.
 
 
 ## Troubleshooting
@@ -119,4 +119,4 @@ X Error of failed request:  BadAccess (attempt to access private resource denied
   Current serial number in output stream:  458
 ```
 
-Then try to add `--ipc=host` parameter to the `docker run` command due to [a comment](https://github.com/osrf/docker_images/issues/21#issuecomment-239334515). But this decrease security, thus do it at your own risk.
+Then try to add `--ipc=host` parameter to the `docker run` command due to [a comment](https://github.com/osrf/docker_images/issues/21#issuecomment-239334515). But this decrease security thus does it at your own risk.
