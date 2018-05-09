@@ -91,7 +91,7 @@ docker build -t myfxbook .
 Login by user "monitor" and type:
 
 ```bash
-docker run -it --rm \
+docker run -d --rm \
     --privileged \
     -u $UID \
     -e DISPLAY=:1 \
@@ -100,9 +100,11 @@ docker run -it --rm \
     myfxbook
 ```
 
-It's strange to me but without `--privileged` parameter you will can't add EAs and scripts to charts! Maybe this parameter can be replaced by more particular `--cap-add` but I didn't investigate this still. You can find some details [here](https://github.com/mviereck/x11docker).
+Without `--cap-add=SYS_PTRACE` parameter you will can't attach any EA to chart and run scripts! I think this is due to checking for any debugger attached to the terminal - protection from sniffing by MetaQuotes.
 
-You can use `-d` parameter instead of `-it` to move the process to background.
+If your EA/script still don't work with `--cap-add=SYS_PTRACE` try to replace it with `--privileged` parameter. But this will give the container access to the host OS as superuser! Instead of this you can investigate which `--cap-add` values will fix you EA/script.
+
+You can use `-it` parameters instead of `-d` to move the main process to the foreground. Worth noting, script `run_mt.sh` will not catch `Ctrl+C` properly as it does for SIGTERM from `docker stop`.
 
 A base image is Ubuntu, therefore if you want to debug the container then add `--entry-point bash` parameter to the `docker run` command.
 
