@@ -32,15 +32,19 @@ RUN set -ex; \
     chmod +x winetricks; \
     mv winetricks /usr/local/bin
 
+COPY waitonprocess.sh /docker/
+RUN chmod a+rx /docker/waitonprocess.sh
+
 ARG USER=winer
 ARG HOME=/home/$USER
+ARG USER_ID=1000
 # To access the values from children containers.
 ENV USER=$USER \
     HOME=$HOME
 
 RUN set -ex; \
     groupadd $USER;\
-    useradd -u 1000 -d $HOME -g $USER -ms /bin/bash $USER
+    useradd -u $USER_ID -d $HOME -g $USER -ms /bin/bash $USER
 
 USER $USER
 WORKDIR $HOME
@@ -53,17 +57,11 @@ ENV MT4DIR=$WINEPREFIX/drive_c/mt4
 ADD cache $HOME/.cache
 USER root
 RUN chown $USER:$USER -R $HOME/.cache
-USER $USER
-
-USER root
-COPY waitonprocess.sh /docker/
-RUN chmod a+rx /docker/waitonprocess.sh
 
 USER $USER
 RUN set -ex; \
     wine wineboot --init; \
-    /docker/waitonprocess.sh wineserver
-RUN set -ex; \
+    /docker/waitonprocess.sh wineserver; \
     winetricks --unattended dotnet40; \
     winetricks --unattended dotnet_verifier; \
     /docker/waitonprocess.sh wineserver
