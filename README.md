@@ -5,12 +5,13 @@ This image has all dependencies which required to run MetaTrader 4 Terminal with
 ## Prepare distribution with MetaTrader 4
 
 1. Install appropriate (branded) MT4 terminal locally and close it if opened after installation
-1. Run it with [`/portable`](https://www.metatrader4.com/en/trading-platform/help/userguide/start_comm) argument to create a structure of Data directory inside the directory with the terminal
+1. Run the terminal with [`/portable`](https://www.metatrader4.com/en/trading-platform/help/userguide/start_comm) parameter to create a structure of Data directory inside the directory with the terminal
 1. Close the terminal
 1. Delete all temporary and unrequired files from the directory with the terminal (`metaeditor.exe`, `terminal.ico`, `Sounds` dir, log files, etc)
-1. Edit a file `myfxbook_ea-example.ini` (only Login, Password, Server fields usually) and save it in the root of the directory of the terminal by name `myfxbook_ea.ini`
-1. Edit a file `Myfxbook-example.set` and save it in directory `MQL4/Presets/` of the terminal by name `Myfxbook.set`
-1. If you plan to extend the `Dockerfile` and add the terminal to the image on build step, then make `mt4.tar.bz2` file by any appropriate tool. E.g. `tar cfj ../mt4.tar.bz2 *`. Make sure that no root folder exists in the archive.
+1. If you required for Myfxbook EA then
+    1. [Install the EA](https://www.myfxbook.com/help/connect-metatrader-ea)
+    1. Edit a file `myfxbook_ea-example.ini` (only Login, Password, Server fields usually) and save it in the root of the directory of the terminal by name `myfxbook_ea.ini`
+    1. Edit a file `Myfxbook-example.set` and save it in directory `MQL4/Presets/` of the terminal by name `Myfxbook.set`
 
 ## Setup host system
 
@@ -105,9 +106,11 @@ You can use `-d` parameter instead of `-it` to move the process to background.
 
 A base image is Ubuntu, therefore if you want to debug the container then add `--entry-point bash` parameter to the `docker run` command.
 
-## Extend image
+## Extending the image
 
-You can make your own `Dockerfile` inherited from this image and copy a particular distribution of MetaTrader 4 Terminal to image on build phase. For this task, env variables `$USER` and `$MT4DIR` are acceptable.
+You can make your own `Dockerfile` inherited from this image and copy a particular distribution of MetaTrader 4 Terminal to an image on build phase. For this task, env variables `$USER` and `$MT4DIR` are acceptable.
+
+You can make an archive with the content from section "Prepare distribution with MetaTrader 4" by any appropriate tool. E.g. `cd mt4-distro; tar cfj ../mt4.tar.bz2 *`. Make sure that no root folder exists in the archive. Then you can extract the archive into the image by instruction `ADD mt4.tar.bz2 $MT4DIR`.
 
 
 ## Troubleshooting
