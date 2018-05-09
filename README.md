@@ -4,107 +4,42 @@ This image has all dependencies which required to run MetaTrader 4 Terminal with
 
 ## Prepare distribution with MetaTrader 4
 
-1. Install appropriate (branded) MT4 terminal locally and close it if opened after installation
+1. Install appropriate (branded) MT4 terminal locally (yep, you can do it on Windows) and close it if opened after installation
 1. Run the terminal with [`/portable`](https://www.metatrader4.com/en/trading-platform/help/userguide/start_comm) parameter to create a structure of Data directory inside the directory with the terminal
 1. Close the terminal
 1. Delete all temporary and unrequired files from the directory with the terminal (`metaeditor.exe`, `terminal.ico`, `Sounds` dir, log files, etc)
 1. If you required for Myfxbook EA then
     1. [Install the EA](https://www.myfxbook.com/help/connect-metatrader-ea)
     1. Edit a file `myfxbook_ea-example.ini` (only Login, Password, Server fields usually) and save it in the root of the directory of the terminal by name `myfxbook_ea.ini`
-    1. Edit a file `Myfxbook-example.set` and save it in directory `MQL4/Presets/` of the terminal by name `Myfxbook.set`
+    1. Edit a file `Myfxbook-example.set` and save it in directory `MQL4/Presets/` of the terminal by the name `Myfxbook.set`
 
-## Setup host system
+## Configure the host system
 
-Unfortunately, MetaTrader 4 can't work without real GUI desktop, thus you should install a desktop application in the host OS. Let's do it with Xfce and TightVNC. And fortunately, the cheapest droplet of DigitalOcean ($5/mon) is enough for running the task. If you haven't account in DigitalOcean you can register by my referral [link](https://m.do.co/c/8a6e11b01bba) to get $10 credit.
+The cheapest droplet of DigitalOcean ($5/mon) is enough for running the container. If you haven't account in DigitalOcean you can register by my referral [link](https://m.do.co/c/8a6e11b01bba) to get $10 credit.
 
-```bash
-sudo apt-get update
-sudo apt-get install tightvncserver xfce4 xfce4-goodies
-vncserver :1
-```
-
-Set a password for connection and test the connection to `<host>:5901` from your machine by a VNC client. These steps inspired by [an article](https://medium.com/google-cloud/linux-gui-on-the-google-cloud-platform-800719ab27c5), if you catch any issue try to read the article first.
-
-Stop the vncserver because we will create a service soon: `vncserver -kill :1`.
-
-Next, create a user to run the container, "monitor" for example. The user should have UID 1000 because it will map to the container where UID 1000 is used for running MetaTrader app. The user should be in docker to run the container.
+A user in the image who runs MetaTrader app has UID 1000 (you can change it by `--build-arg USER_ID=NNNN` of `docker build`), so you may need to create a user in the host OS to map with it. Let's name it "monitor" for example. The user should be in docker group to run the container.
 
 ```bash
 useradd -u 1000 -s /bin/bash -mU monitor
 adduser monitor docker
 ```
 
-Let's create a service to start VNC server automatically after reboot. Copy the following into `/etc/init.d/vncserver`:
-
-```bash
-#!/bin/sh -e
-### BEGIN INIT INFO
-# Provides:          vncserver
-# Required-Start:    networking
-# Required-Stop:
-# Default-Start:     3 4 5
-# Default-Stop:      0 6
-### END INIT INFO
-
-# The username:group that will run VNC
-export USER="root"
-
-# The display that VNC will use
-DISPLAY=":1"
-# The Desktop geometry to use.
-GEOMETRY="1024x768"
-
-OPTIONS="-geometry ${GEOMETRY} ${DISPLAY}"
-
-. /lib/lsb/init-functions
-
-case "$1" in
-start)
-    log_action_begin_msg "Starting vncserver for user '${USER}' on ${DISPLAY}"
-    su ${USER} -c "/usr/bin/vncserver ${OPTIONS}"
-    # Give access to X Server for other users
-    su ${USER} -c "DISPLAY=${DISPLAY} xhost +localhost"
-    ;;
-stop)
-    log_action_begin_msg "Stoping vncserver for user '${USER}' on ${DISPLAY}"
-    su ${USER} -c "/usr/bin/vncserver -kill ${DISPLAY}"
-    ;;
-restart)
-    $0 stop
-    $0 start
-    ;;
-esac
-
-exit 0
-```
-
-Make the script executable with `chmod +x /etc/init.d/vncserver`. Then run `update-rc.d vncserver defaults`. And finally `/etc/init.d/vncserver start`. These steps inspired by [an article](http://www.abdevelopment.ca/blog/start-vnc-server-ubuntu-boot/), if you catch any issue try to read the article first.
-
 ## Run the container
-
-Login by root and build the container:
-
-```bash
-docker build -t myfxbook .
-```
 
 Login by user "monitor" and type:
 
 ```bash
 docker run -d --rm \
-    --privileged \
-    -u $UID \
-    -e DISPLAY=:1 \
-    -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+    --cap-add=SYS_PTRACE \
     -v /path/to/prepared/mt4/distro:/home/winer/.wine/drive_c/mt4 \
-    myfxbook
+    nevmerzhitsky/mt4-for-myfxbook-ea
 ```
 
-Without `--cap-add=SYS_PTRACE` parameter you will can't attach any EA to chart and run scripts! I think this is due to checking for any debugger attached to the terminal - protection from sniffing by MetaQuotes.
+Or do it by root but add `--user 1000` parameter to command.
 
-If your EA/script still don't work with `--cap-add=SYS_PTRACE` try to replace it with `--privileged` parameter. But this will give the container access to the host OS as superuser! Instead of this you can investigate which `--cap-add` values will fix you EA/script.
+Without `--cap-add=SYS_PTRACE` parameter you will can't attach any EA to chart and run any script. (I think this is due to checking for any debugger attached to the terminal - protection from sniffing by MetaQuotes.) If your EA/script doesn't work even with `--cap-add=SYS_PTRACE` then replace it with `--privileged` parameter and try again. But this decrease security thus does it at your own risk! Instead of this, you can investigate which `--cap-add` values will fix you EA/script.
 
-You can use `-it` parameters instead of `-d` to move the main process to the foreground. Worth noting, script `run_mt.sh` will not catch `Ctrl+C` properly as it does for SIGTERM from `docker stop`.
+You can use `-it` parameters instead of `-d` to move the main process to the foreground. Worth noting, the main process of the container (script `run_mt.sh`) will not catch `Ctrl+C` properly as it does for SIGTERM from `docker stop`. This may lead to abnormal termination of the terminal.
 
 A base image is Ubuntu, therefore if you want to debug the container then add `--entry-point bash` parameter to the `docker run` command.
 
@@ -112,8 +47,7 @@ A base image is Ubuntu, therefore if you want to debug the container then add `-
 
 You can make your own `Dockerfile` inherited from this image and copy a particular distribution of MetaTrader 4 Terminal to an image on build phase. For this task, env variables `$USER` and `$MT4DIR` are acceptable.
 
-You can make an archive with the content from section "Prepare distribution with MetaTrader 4" by any appropriate tool. E.g. `cd mt4-distro; tar cfj ../mt4.tar.bz2 *`. Make sure that no root folder exists in the archive. Then you can extract the archive into the image by instruction `ADD mt4.tar.bz2 $MT4DIR`.
-
+You can make an archive with the content from section "Prepare distribution with MetaTrader 4" by an appropriate tool. E.g. `cd mt4-distro; tar cfj ../mt4.tar.bz2 *`. Make sure that no root folder exists in the archive. Then you can extract the archive into the image by instruction `ADD mt4.tar.bz2 $MT4DIR`.
 
 ## Troubleshooting
 
@@ -127,4 +61,4 @@ X Error of failed request:  BadAccess (attempt to access private resource denied
   Current serial number in output stream:  458
 ```
 
-Then try to add `--ipc=host` parameter to the `docker run` command due to [a comment](https://github.com/osrf/docker_images/issues/21#issuecomment-239334515). But this decrease security thus does it at your own risk.
+Then try to add `--ipc=host` parameter to the `docker run` command due to [a comment](https://github.com/osrf/docker_images/issues/21#issuecomment-239334515). But this decrease security thus does it at your own risk!
