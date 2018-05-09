@@ -40,7 +40,7 @@ ENV USER=$USER \
 
 RUN set -ex; \
     groupadd $USER;\
-    useradd -d $HOME -g $USER -ms /bin/bash $USER
+    useradd -u 1000 -d $HOME -g $USER -ms /bin/bash $USER
 
 USER $USER
 WORKDIR $HOME
