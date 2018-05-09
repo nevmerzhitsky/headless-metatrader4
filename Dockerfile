@@ -68,6 +68,11 @@ RUN set -ex; \
     winetricks --unattended dotnet_verifier; \
     /docker/waitonprocess.sh wineserver
 
+USER root
+COPY run_mt.sh /docker/
+RUN chmod a+rx /docker/run_mt.sh
+
+USER $USER
 WORKDIR $MT4DIR
 
-ENTRYPOINT ["wine", "terminal", "/portable", "myfxbook_ea.ini"]
+ENTRYPOINT ["bash", "/docker/run_mt.sh"]
