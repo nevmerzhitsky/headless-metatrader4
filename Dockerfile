@@ -51,8 +51,11 @@ RUN set -ex; \
 USER $USER
 WORKDIR $HOME
 
-ENV WINEARCH=win32
-ENV WINEPREFIX=$HOME/.wine
+ENV WINEARCH=win32 \
+    WINEPREFIX=$HOME/.wine \
+    DISPLAY=:1 \
+    SCREEN_NUM=0 \
+    SCREEN_WHD=1366x768x24
 ENV MT4DIR=$WINEPREFIX/drive_c/mt4
 
 # @TODO Install actual versions of Mono and Gecko dynamically
@@ -65,7 +68,6 @@ RUN set -ex; \
     wine wineboot --init; \
     /docker/waitonprocess.sh wineserver; \
     winetricks --unattended dotnet40; \
-    winetricks --unattended dotnet_verifier; \
     /docker/waitonprocess.sh wineserver
 
 USER root

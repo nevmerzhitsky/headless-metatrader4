@@ -2,6 +2,8 @@
 # Break script on any non-zero status of any command
 set -e
 
+export DISPLAY SCREEN_NUM SCREEN_WHD
+
 XVFB_PID=0
 TERMINAL_PID=0
 
@@ -30,9 +32,7 @@ term_handler() {
 
 trap 'term_handler' SIGTERM
 
-export DISPLAY=:1
-
-Xvfb $DISPLAY -screen 0 1366x768x24 \
+Xvfb $DISPLAY -screen $SCREEN_NUM $SCREEN_WHD \
     +extension GLX \
     +extension RANDR \
     +extension RENDER \
