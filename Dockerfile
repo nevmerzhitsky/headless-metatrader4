@@ -11,6 +11,8 @@ RUN set -ex; \
         binutils \
         cabextract \
         curl \
+        # To take screenshots of Xvfb display
+        imagemagick \
         p7zip \
         software-properties-common \
         wget \
