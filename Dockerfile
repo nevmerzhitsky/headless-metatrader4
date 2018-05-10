@@ -71,10 +71,14 @@ RUN set -ex; \
     /docker/waitonprocess.sh wineserver
 
 USER root
-COPY run_mt.sh /docker/
-RUN chmod a+rx /docker/run_mt.sh
+COPY run_mt.sh screenshot.sh /docker/
+RUN set -e; \
+    chmod a+rx /docker/run_mt.sh /docker/screenshot.sh; \
+    mkdir -p /tmp/screenshots/; \
+    chown winer:winer /tmp/screenshots/
 
 USER $USER
 WORKDIR $MT4DIR
+VOLUME /tmp/screenshots/
 
 ENTRYPOINT ["bash", "/docker/run_mt.sh"]
