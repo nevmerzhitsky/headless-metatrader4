@@ -49,6 +49,22 @@ You can make your own `Dockerfile` inherited from this image and copy a particul
 
 You can make an archive with the content from section "Prepare distribution with MetaTrader 4" by an appropriate tool. E.g. `cd mt4-distro; tar cfj ../mt4.tar.bz2 *`. Make sure that no root folder exists in the archive. Then you can extract the archive into the image by instruction `ADD mt4.tar.bz2 $MT4DIR`.
 
+## Known issues
+
+If the view area of Xvfb is lesser than the screen resolution (1366x768 by default) you can fix it by starting the terminal with a desktop app: fluxbox, openbox or the same. Both packages available by `apt-get` and can be started just by `fluxbox &` or `openbox &`. So an example of running the stack is:
+
+```bash
+Xvfb $DISPLAY -screen $SCREEN_NUM $SCREEN_WHD \
+    +extension GLX \
+    +extension RANDR \
+    +extension RENDER \
+    &> /tmp/xvfb.log &
+sleep 2
+fluxbox &
+sleep 2
+wine terminal /portable myfxbook_ea.ini &
+```
+
 ## Troubleshooting
 
 If you see this error in the container logs:
