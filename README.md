@@ -37,7 +37,7 @@ docker run -d --rm \
 
 Or do it by root but add `--user 1000` parameter to command.
 
-Without `--cap-add=SYS_PTRACE` parameter you will can't attach any EA to chart and run any script. (I think this is due to checking for any debugger attached to the terminal - protection from sniffing by MetaQuotes.) If your EA/script doesn't work even with `--cap-add=SYS_PTRACE` then replace it with `--privileged` parameter and try again. But this decrease security thus does it at your own risk! Instead of this, you can investigate which `--cap-add` values will fix you EA/script.
+Without `--cap-add=SYS_PTRACE` parameter you will can't attach any EA to chart and run any script. (I think this is due to checking for any debugger attached to the terminal - protection from sniffing by MetaQuotes.) If your EA/script doesn't work even with `--cap-add=SYS_PTRACE` then replace it with `--privileged` parameter and try again. But this decrease security thus do it at your own risk! Instead of this, you can investigate which `--cap-add` values will fix you EA/script.
 
 You can use `-it` parameters instead of `-d` to move the main process to the foreground. Worth noting, the main process of the container (script `run_mt.sh`) will not catch `Ctrl+C` properly as it does for SIGTERM from `docker stop`. This may lead to abnormal termination of the terminal.
 
@@ -77,4 +77,4 @@ X Error of failed request:  BadAccess (attempt to access private resource denied
   Current serial number in output stream:  458
 ```
 
-Then try to add `--ipc=host` parameter to the `docker run` command due to [a comment](https://github.com/osrf/docker_images/issues/21#issuecomment-239334515). But this decrease security thus does it at your own risk!
+Then try to add `--ipc=host` parameter to the `docker run` command due to [a comment](https://github.com/osrf/docker_images/issues/21#issuecomment-239334515). But this decrease security thus do it at your own risk!
