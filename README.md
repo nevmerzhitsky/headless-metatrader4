@@ -43,6 +43,12 @@ You can use `-it` parameters instead of `-d` to move the main process to the for
 
 A base image is Ubuntu, therefore if you want to debug the container then add `--entry-point bash` parameter to the `docker run` command.
 
+## Monitor the terminal
+
+If you need to check visually what your MetaTrader terminal doing, you have several options.
+
+Firstly, is a built-in script which takes a screenshot of the Xvfb screen. Add `-v /path/to/screenshots/dir:/tmp/screenshots` parameter to `docker run` command then run this command: `docker run CONTAINER_ID /docker/screenshot.sh`. By default, the name of the screenshot is current time in the container, but you can override it by the first argument of screenshot.sh: `docker run CONTAINER_ID /docker/screenshot.sh my-screenshot`.
+
 ## Extending the image
 
 You can make your own `Dockerfile` inherited from this image and copy a particular distribution of MetaTrader 4 Terminal to an image on build phase. For this task, env variables `$USER` and `$MT4DIR` are acceptable.
