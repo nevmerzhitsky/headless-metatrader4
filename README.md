@@ -35,10 +35,9 @@ adduser monitor docker
 1. Run the terminal with [`/portable`](https://www.metatrader4.com/en/trading-platform/help/userguide/start_comm) parameter to create a structure of Data directory inside the directory with the terminal
 1. Close the terminal
 1. Delete all temporary and unrequired files from the directory with the terminal (`metaeditor.exe`, `terminal.ico`, `Sounds` dir, log files, etc)
-1. If you required for Myfxbook EA then
-    1. [Install the EA](https://www.myfxbook.com/help/connect-metatrader-ea)
-    1. Edit a file `startup-example.ini` (only Login, Password, Server fields usually) and save it in the root of the directory of the terminal by name `startup.ini`
-    1. Edit a file `Preset-example.set` and save it in directory `MQL4/Presets/` of the terminal by the name `Preset.set`
+1. If you required for Myfxbook EA then [install the EA](https://www.myfxbook.com/help/connect-metatrader-ea)
+1. Edit a file `startup-example.ini` (only Login, Password, Server, Symbol, Expert fields usually) and save it in the root of the directory of the terminal by name `startup.ini`
+1. Edit a file `Preset-example.set` and save it in directory `MQL4/Presets/` of the terminal by the name `Preset.set`
 
 ## Run the container
 
