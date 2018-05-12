@@ -33,7 +33,7 @@ This image has all dependencies which required to run MetaTrader 4 Terminal with
 
 ## Configure the host system
 
-The cheapest droplet of DigitalOcean ($5/mon) is enough for running the container. If you haven't account in DigitalOcean you can register by my referral [link](https://m.do.co/c/8a6e11b01bba) to get $10 credit.
+The cheapest $5/mon DigitalOcean droplet is enough for running the container. If you haven't a DigitalOcean account you can register by my referral [link](https://m.do.co/c/8a6e11b01bba) to get $10 credit.
 
 A user in the image who runs MetaTrader app has UID 1000 (you can change it by `--build-arg USER_ID=NNNN` of `docker build`), so you may need to create a user in the host OS to map with it. Let's name it "monitor" for example. The user should be in docker group to run the container.
 
