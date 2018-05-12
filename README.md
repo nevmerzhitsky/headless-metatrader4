@@ -1,6 +1,4 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+**Table of Contents**
 
 - [Headless MetaTrader 4 Terminal in wine](#headless-metatrader-4-terminal-in-wine)
   - [Configure the host system](#configure-the-host-system)
@@ -13,8 +11,6 @@
   - [Extending the image](#extending-the-image)
   - [Known issues](#known-issues)
   - [Troubleshooting](#troubleshooting)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Headless MetaTrader 4 Terminal in wine
 
