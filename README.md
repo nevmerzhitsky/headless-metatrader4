@@ -2,9 +2,9 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [MetaTrader 4 Terminal in wine](#metatrader-4-terminal-in-wine)
-  - [Prepare distribution with MetaTrader 4](#prepare-distribution-with-metatrader-4)
+- [Headless MetaTrader 4 Terminal in wine](#headless-metatrader-4-terminal-in-wine)
   - [Configure the host system](#configure-the-host-system)
+  - [Prepare distribution with MetaTrader 4](#prepare-distribution-with-metatrader-4)
   - [Run the container](#run-the-container)
   - [Monitor the terminal](#monitor-the-terminal)
     - [Screenshots](#screenshots)
@@ -16,20 +16,11 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# MetaTrader 4 Terminal in wine
+# Headless MetaTrader 4 Terminal in wine
 
-This image has all dependencies which required to run MetaTrader 4 Terminal with Myfxbook EA in wine, but can be used for some other EAs/scripts.
+This image is a prepared environment to execute a MetaTrader 4 Terminal which you drop to the container. Most likely, this will be enough to run any EA/script but you should test this by yourself.
 
-## Prepare distribution with MetaTrader 4
-
-1. Install appropriate (branded) MT4 terminal locally (yep, you can do it on Windows) and close it if opened after installation
-1. Run the terminal with [`/portable`](https://www.metatrader4.com/en/trading-platform/help/userguide/start_comm) parameter to create a structure of Data directory inside the directory with the terminal
-1. Close the terminal
-1. Delete all temporary and unrequired files from the directory with the terminal (`metaeditor.exe`, `terminal.ico`, `Sounds` dir, log files, etc)
-1. If you required for Myfxbook EA then
-    1. [Install the EA](https://www.myfxbook.com/help/connect-metatrader-ea)
-    1. Edit a file `myfxbook_ea-example.ini` (only Login, Password, Server fields usually) and save it in the root of the directory of the terminal by name `myfxbook_ea.ini`
-    1. Edit a file `Myfxbook-example.set` and save it in directory `MQL4/Presets/` of the terminal by the name `Myfxbook.set`
+The image has all dependencies which required to run Myfxbook EA.
 
 ## Configure the host system
 
@@ -41,6 +32,17 @@ A user in the image who runs MetaTrader app has UID 1000 (you can change it by `
 useradd -u 1000 -s /bin/bash -mU monitor
 adduser monitor docker
 ```
+
+## Prepare distribution with MetaTrader 4
+
+1. Install appropriate (branded) MT4 terminal locally (yep, you can do it on Windows) and close it if opened after installation
+1. Run the terminal with [`/portable`](https://www.metatrader4.com/en/trading-platform/help/userguide/start_comm) parameter to create a structure of Data directory inside the directory with the terminal
+1. Close the terminal
+1. Delete all temporary and unrequired files from the directory with the terminal (`metaeditor.exe`, `terminal.ico`, `Sounds` dir, log files, etc)
+1. If you required for Myfxbook EA then
+    1. [Install the EA](https://www.myfxbook.com/help/connect-metatrader-ea)
+    1. Edit a file `myfxbook_ea-example.ini` (only Login, Password, Server fields usually) and save it in the root of the directory of the terminal by name `myfxbook_ea.ini`
+    1. Edit a file `Myfxbook-example.set` and save it in directory `MQL4/Presets/` of the terminal by the name `Myfxbook.set`
 
 ## Run the container
 
