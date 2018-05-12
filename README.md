@@ -47,7 +47,25 @@ A base image is Ubuntu, therefore if you want to debug the container then add `-
 
 If you need to check visually what your MetaTrader terminal doing, you have several options.
 
-Firstly, is a built-in script which takes a screenshot of the Xvfb screen. Add `-v /path/to/screenshots/dir:/tmp/screenshots` parameter to `docker run` command then run this command: `docker exec <CONTAINER_ID> /docker/screenshot.sh`. By default, the name of the screenshot is current time in the container, but you can override it by the first argument of screenshot.sh: `docker exec <CONTAINER_ID> /docker/screenshot.sh my-screenshot`.
+**The first option** is a built-in script which takes a screenshot of the Xvfb screen. Add `-v /path/to/screenshots/dir:/tmp/screenshots` parameter to `docker run` command then run this command: `docker exec <CONTAINER_ID> /docker/screenshot.sh`. By default, the name of the screenshot is current time in the container, but you can override it by the first argument of screenshot.sh: `docker exec <CONTAINER_ID> /docker/screenshot.sh my-screenshot`.
+
+**The second option** is setup VNC server and connect to the container via VNC client. This gives you the ability to manipulate the terminal as a usual desktop app. For example, you can install `x11vnc` by `apt-get`. So an example of running the stack is:
+
+```bash
+Xvfb $DISPLAY -screen $SCREEN_NUM $SCREEN_WHD \
+    +extension GLX \
+    +extension RANDR \
+    +extension RENDER \
+    &> /tmp/xvfb.log &
+sleep 2
+x11vnc -bg -nopw -rfbport 5900 -forever -xkb -o /tmp/x11vnc.log 
+sleep 2
+wine terminal /portable myfxbook_ea.ini &
+```
+
+You can use `run_mt.sh` as skeleton to add this step.
+
+You should publish 5100 port by adding `-p 5900:5900` parameter to `docker run`.
 
 ## Extending the image
 
@@ -57,7 +75,7 @@ You can make an archive with the content from section "Prepare distribution with
 
 ## Known issues
 
-If the view area of Xvfb is lesser than the screen resolution (1366x768 by default) you can fix it by starting the terminal with a desktop app: fluxbox, openbox or the same. Both packages available by `apt-get` and can be started just by `fluxbox &` or `openbox &`. So an example of running the stack is:
+If the view area of Xvfb is lesser than the screen resolution (1366x768 by default) you can fix it by starting the terminal with a desktop manager: fluxbox, openbox or the same. Both packages available by `apt-get` and can be started just by `fluxbox &` or `openbox &`. So an example of running the stack is:
 
 ```bash
 Xvfb $DISPLAY -screen $SCREEN_NUM $SCREEN_WHD \
@@ -70,6 +88,10 @@ fluxbox &
 sleep 2
 wine terminal /portable myfxbook_ea.ini &
 ```
+
+You can use `run_mt.sh` as skeleton to add this step.
+
+If you using local VNC server also then you should run it right after the desktop manager.
 
 ## Troubleshooting
 
