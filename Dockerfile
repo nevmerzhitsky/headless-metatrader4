@@ -81,4 +81,5 @@ USER $USER
 WORKDIR $MT4DIR
 VOLUME /tmp/screenshots/
 
-CMD /docker/run_mt.sh
+ENTRYPOINT ["/bin/bash"]
+CMD ["/docker/run_mt.sh"]

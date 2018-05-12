@@ -47,7 +47,7 @@ A base image is Ubuntu, therefore if you want to debug the container then add `-
 
 If you need to check visually what your MetaTrader terminal doing, you have several options.
 
-Firstly, is a built-in script which takes a screenshot of the Xvfb screen. Add `-v /path/to/screenshots/dir:/tmp/screenshots` parameter to `docker run` command then run this command: `docker run CONTAINER_ID /docker/screenshot.sh`. By default, the name of the screenshot is current time in the container, but you can override it by the first argument of screenshot.sh: `docker run CONTAINER_ID /docker/screenshot.sh my-screenshot`.
+Firstly, is a built-in script which takes a screenshot of the Xvfb screen. Add `-v /path/to/screenshots/dir:/tmp/screenshots` parameter to `docker run` command then run this command: `docker exec <CONTAINER_ID> /docker/screenshot.sh`. By default, the name of the screenshot is current time in the container, but you can override it by the first argument of screenshot.sh: `docker exec <CONTAINER_ID> /docker/screenshot.sh my-screenshot`.
 
 ## Extending the image
 
