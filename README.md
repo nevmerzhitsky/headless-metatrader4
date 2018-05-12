@@ -58,14 +58,24 @@ Xvfb $DISPLAY -screen $SCREEN_NUM $SCREEN_WHD \
     +extension RENDER \
     &> /tmp/xvfb.log &
 sleep 2
-x11vnc -bg -nopw -rfbport 5900 -forever -xkb -o /tmp/x11vnc.log 
+x11vnc -bg -nopw -rfbport 5900 -forever -xkb -o /tmp/x11vnc.log
 sleep 2
 wine terminal /portable myfxbook_ea.ini &
 ```
 
 You can use `run_mt.sh` as skeleton to add this step.
 
-You should publish 5100 port by adding `-p 5900:5900` parameter to `docker run`.
+You should publish 5100 port by adding `-p 5900:5900` parameter to `docker run`. Note that anybody can connect to 5900 port because x11vnc configured without password. Google to understand how to protect and secure your VNC connection.
+
+**The third option** is use X Window System of the host.
+
+To use the display :1 of the host from the container just add these parameters to `docker run`:
+* `-e DISPLAY=:1`
+* `-v /tmp/.X11-unix:/tmp/.X11-unix:ro`
+
+You may need to give access to the display on the host by the command `DISPLAY=:1 xhost +localhost` (read man of xhost for details).
+
+After this, if the host is your own machine you will be able to control the terminal as a usual desktop app. But if the host is a hosted server you also can setup VNC server in the host and connect to the container via VNC client. For example, you can use Xfce and TightVNC for this. Read [an article](https://medium.com/google-cloud/linux-gui-on-the-google-cloud-platform-800719ab27c5) to setup the stack. And google to understand how to protect and secure your VNC connection.
 
 ## Extending the image
 
