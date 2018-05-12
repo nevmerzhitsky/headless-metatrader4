@@ -71,7 +71,7 @@ The first option is a built-in script which takes a screenshot of the Xvfb scree
 
 ### VNC server
 
-The second option is setup VNC server and connect to the container via VNC client. This gives you the ability to manipulate the terminal as a usual desktop app. For example, you can install `x11vnc` by `apt-get`. So an example of running the stack is:
+The second option is setup VNC server in the container and connect to the container via VNC client. This gives you the ability to manipulate the terminal as a usual desktop app. For example, you can install `x11vnc` by `apt-get`. So an example of running the stack is:
 
 ```bash
 Xvfb $DISPLAY -screen $SCREEN_NUM $SCREEN_WHD \
@@ -87,7 +87,7 @@ wine terminal /portable myfxbook_ea.ini &
 
 You can use `run_mt.sh` as skeleton to add this step.
 
-You should publish 5100 port by adding `-p 5900:5900` parameter to `docker run`. Note that anybody can connect to 5900 port because x11vnc configured without password. Google to understand how to protect and secure your VNC connection.
+You should publish 5100 port by adding `-p 5900:5900` parameter to `docker run`. Note that anybody can connect to 5900 port because x11vnc configured without a password. Google to understand how to protect and secure your VNC connection.
 
 ### X Window System of the host
 
@@ -99,7 +99,9 @@ To use the display :1 of the host from the container just add these parameters t
 
 You may need to give access to the display on the host by the command `DISPLAY=:1 xhost +localhost` (read man of xhost for details).
 
-After this, if the host is your own machine you will be able to control the terminal as a usual desktop app. But if the host is a hosted server you also can setup VNC server in the host and connect to the container via VNC client. For example, you can use Xfce and TightVNC for this. Read [an article](https://medium.com/google-cloud/linux-gui-on-the-google-cloud-platform-800719ab27c5) to setup the stack. And google to understand how to protect and secure your VNC connection.
+After this, if the host is your own machine you will be able to control the terminal as a usual desktop app.
+
+But if the host is a hosted server you should be done additional work before running `docker run`. Logic is the same as the second option, but you will install VNC server to the host instead of the container. For example, you can use Xfce and TightVNC for this. Read [an article](https://medium.com/google-cloud/linux-gui-on-the-google-cloud-platform-800719ab27c5) to setup the stack. And google to understand how to protect and secure your VNC connection. Then run `docker run` with the additional parameters.
 
 ## Extending the image
 
