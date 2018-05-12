@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [MetaTrader 4 Terminal in wine](#metatrader-4-terminal-in-wine)
+  - [Prepare distribution with MetaTrader 4](#prepare-distribution-with-metatrader-4)
+  - [Configure the host system](#configure-the-host-system)
+  - [Run the container](#run-the-container)
+  - [Monitor the terminal](#monitor-the-terminal)
+    - [Screenshots](#screenshots)
+    - [VNC server](#vnc-server)
+    - [X Window System of the host](#x-window-system-of-the-host)
+  - [Extending the image](#extending-the-image)
+  - [Known issues](#known-issues)
+  - [Troubleshooting](#troubleshooting)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # MetaTrader 4 Terminal in wine
 
 This image has all dependencies which required to run MetaTrader 4 Terminal with Myfxbook EA in wine, but can be used for some other EAs/scripts.
@@ -47,9 +65,13 @@ A base image is Ubuntu, therefore if you want to debug the container then add `-
 
 If you need to check visually what your MetaTrader terminal doing, you have several options.
 
-**The first option** is a built-in script which takes a screenshot of the Xvfb screen. Add `-v /path/to/screenshots/dir:/tmp/screenshots` parameter to `docker run` command then run this command: `docker exec <CONTAINER_ID> /docker/screenshot.sh`. By default, the name of the screenshot is current time in the container, but you can override it by the first argument of screenshot.sh: `docker exec <CONTAINER_ID> /docker/screenshot.sh my-screenshot`.
+### Screenshots
 
-**The second option** is setup VNC server and connect to the container via VNC client. This gives you the ability to manipulate the terminal as a usual desktop app. For example, you can install `x11vnc` by `apt-get`. So an example of running the stack is:
+The first option is a built-in script which takes a screenshot of the Xvfb screen. Add `-v /path/to/screenshots/dir:/tmp/screenshots` parameter to `docker run` command then run this command: `docker exec <CONTAINER_ID> /docker/screenshot.sh`. By default, the name of the screenshot is current time in the container, but you can override it by the first argument of screenshot.sh: `docker exec <CONTAINER_ID> /docker/screenshot.sh my-screenshot`.
+
+### VNC server
+
+The second option is setup VNC server and connect to the container via VNC client. This gives you the ability to manipulate the terminal as a usual desktop app. For example, you can install `x11vnc` by `apt-get`. So an example of running the stack is:
 
 ```bash
 Xvfb $DISPLAY -screen $SCREEN_NUM $SCREEN_WHD \
@@ -67,7 +89,9 @@ You can use `run_mt.sh` as skeleton to add this step.
 
 You should publish 5100 port by adding `-p 5900:5900` parameter to `docker run`. Note that anybody can connect to 5900 port because x11vnc configured without password. Google to understand how to protect and secure your VNC connection.
 
-**The third option** is use X Window System of the host.
+### X Window System of the host
+
+The third option is use X Window System of the host.
 
 To use the display :1 of the host from the container just add these parameters to `docker run`:
 * `-e DISPLAY=:1`
