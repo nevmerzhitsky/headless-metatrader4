@@ -37,8 +37,8 @@ adduser monitor docker
 1. Delete all temporary and unrequired files from the directory with the terminal (`metaeditor.exe`, `terminal.ico`, `Sounds` dir, log files, etc)
 1. If you required for Myfxbook EA then
     1. [Install the EA](https://www.myfxbook.com/help/connect-metatrader-ea)
-    1. Edit a file `myfxbook_ea-example.ini` (only Login, Password, Server fields usually) and save it in the root of the directory of the terminal by name `myfxbook_ea.ini`
-    1. Edit a file `Myfxbook-example.set` and save it in directory `MQL4/Presets/` of the terminal by the name `Myfxbook.set`
+    1. Edit a file `startup-example.ini` (only Login, Password, Server fields usually) and save it in the root of the directory of the terminal by name `startup.ini`
+    1. Edit a file `Preset-example.set` and save it in directory `MQL4/Presets/` of the terminal by the name `Preset.set`
 
 ## Run the container
 
@@ -48,7 +48,7 @@ Login by user "monitor" and type:
 docker run -d --rm \
     --cap-add=SYS_PTRACE \
     -v /path/to/prepared/mt4/distro:/home/winer/.wine/drive_c/mt4 \
-    nevmerzhitsky/mt4-for-myfxbook-ea
+    nevmerzhitsky/headless-metatrader4
 ```
 
 Or do it by root but add `--user 1000` parameter to command.
@@ -80,7 +80,7 @@ Xvfb $DISPLAY -screen $SCREEN_NUM $SCREEN_WHD \
 sleep 2
 x11vnc -bg -nopw -rfbport 5900 -forever -xkb -o /tmp/x11vnc.log
 sleep 2
-wine terminal /portable myfxbook_ea.ini &
+wine terminal /portable startup.ini &
 ```
 
 You can use `run_mt.sh` as skeleton to add this step.
@@ -120,7 +120,7 @@ Xvfb $DISPLAY -screen $SCREEN_NUM $SCREEN_WHD \
 sleep 2
 fluxbox &
 sleep 2
-wine terminal /portable myfxbook_ea.ini &
+wine terminal /portable startup.ini &
 ```
 
 You can use `run_mt.sh` as skeleton to add this step.
