@@ -33,8 +33,10 @@ adduser monitor docker
 
 1. Install appropriate (branded) MT4 terminal locally (yep, you can do it on Windows) and close it if opened after installation
 1. Run the terminal with [`/portable`](https://www.metatrader4.com/en/trading-platform/help/userguide/start_comm) parameter to create a structure of Data directory inside the directory with the terminal. I recommend you to use `cmd.exe` program to do this. And if the terminal was installed to C: drive you may be required to start cmd.exe with administrative privileges to have access to create files in the terminal dir.
+1. In the terminal close the connection dialog and all opened charts to prevent connecting to any server and opening any chart at the terminal startup
+1. Open terminal settings and reduce max amount of bars in the chart to reduce the amount of used RAM by the terminal. Also, enable the ability to auto-trade and using DLLs if your EA/script required for. Also, remove checks from news and saving login/password.
 1. Close the terminal
-1. Delete all temporary and unrequired files from the directory with the terminal (`metaeditor.exe`, `terminal.ico`, `Sounds` dir, log files, etc)
+1. Delete all temporary and unrequired files from the directory with the terminal (`terminal.ico`, `uninstall.exe`, `Sounds` dir, log files, etc)
 1. If you required for Myfxbook EA then [install the EA](https://www.myfxbook.com/help/connect-metatrader-ea)
 1. Edit a file `startup-example.ini` (only Login, Password, Server, Symbol, Expert fields usually) and save it in the root of the directory of the terminal by name `startup.ini`
 1. Edit a file `Preset-example.set` and save it in directory `MQL4/Presets/` of the terminal by the name `Preset.set`
