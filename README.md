@@ -34,7 +34,7 @@ adduser monitor docker
 1. Install appropriate (branded) MT4 terminal locally (yep, you can do it on Windows) and close it if opened after installation.
 1. Run the terminal with [`/portable`](https://www.metatrader4.com/en/trading-platform/help/userguide/start_comm) parameter to create a structure of Data directory inside the directory with the terminal. I recommend you to use `cmd.exe` program to do this. And if the terminal was installed to C: drive you may be required to start cmd.exe with administrative privileges to have access to create files in the terminal dir.
 1. In the terminal close the connection dialog and all opened charts to prevent connecting to any server and opening any chart at the terminal startup.
-1. Open terminal settings and:
+1. Open the terminal settings and:
   * remove checks from Saving login/password and News options
   * reduce max amount of bars on the chart and in the history to 5000 if your program accept this
   * enable the ability to auto-trade and using DLLs if your program required for 
@@ -109,7 +109,7 @@ But if the host is a hosted server you should be done additional work before run
 
 You can make your own `Dockerfile` inherited from this image and copy a particular distribution of MetaTrader 4 Terminal to an image on build phase. For this task, env variables `$USER` and `$MT4DIR` are acceptable.
 
-You can make an archive with the content from section "Prepare distribution with MetaTrader 4" by an appropriate tool. E.g. `cd mt4-distro; tar cfj ../mt4.tar.bz2 *`. Make sure that no root folder exists in the archive. Then you can extract the archive into the image by instruction `ADD mt4.tar.bz2 $MT4DIR`.
+You can make an archive with the content from section "Prepare distribution with MetaTrader 4" by an appropriate tool. E.g. `cd mt4-distro; tar cfj ../mt4.tar.bz2 *`. Make sure that no root directory exists in the archive. Then you can extract the archive into the image by instruction `ADD mt4.tar.bz2 $MT4DIR`.
 
 ## Known issues
 
