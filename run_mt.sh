@@ -40,6 +40,7 @@ Xvfb $DISPLAY -screen $SCREEN_NUM $SCREEN_WHD \
 XVFB_PID=$!
 sleep 2
 
+# @TODO Use special argument to pass value "startup.ini"
 wine terminal /portable startup.ini &
 TERMINAL_PID=$!
 

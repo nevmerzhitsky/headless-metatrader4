@@ -83,3 +83,6 @@ VOLUME /tmp/screenshots/
 
 ENTRYPOINT ["/bin/bash"]
 CMD ["/docker/run_mt.sh"]
+
+# @TODO Add ability to list logs which content should be redirected to STDOUT with a prefix
+# @TODO Add ability to change TZ of the OS
