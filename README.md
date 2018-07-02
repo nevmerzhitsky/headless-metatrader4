@@ -37,7 +37,10 @@ adduser monitor docker
 1. Open the terminal settings and:
   * remove checks from Saving login/password and News options
   * reduce max amount of bars on the chart and in the history to 5000 if your program accept this
-  * enable the ability to auto-trade and using DLLs if your program required for 
+  * enable One-click trading
+  * enable the ability to auto-trading and using DLLs if your program required for
+  * disable Audio events because no one will hear them
+1. Connect to a server by any login to initialize history and other directories on the disk
 1. Close the terminal.
 1. Delete all temporary and unrequired files from the directory with the terminal (`terminal.ico`, `uninstall.exe`, `Sounds` dir, log files, etc).
 1. If you required for Myfxbook EA then [install the EA](https://www.myfxbook.com/help/connect-metatrader-ea).
