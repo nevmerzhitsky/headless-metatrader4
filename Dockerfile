@@ -79,6 +79,7 @@ RUN set -e; \
 
 USER $USER
 WORKDIR $MT4DIR
+VOLUME $MT4DIR
 VOLUME /tmp/screenshots/
 
 ENTRYPOINT ["/bin/bash"]
