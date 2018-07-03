@@ -49,6 +49,7 @@ RUN set -ex; \
     useradd -u $USER_ID -d $HOME -g $USER -ms /bin/bash $USER
 
 USER $USER
+WORKDIR $HOME
 
 ENV WINEARCH=win32 \
     WINEPREFIX=$HOME/.wine \
@@ -67,8 +68,7 @@ RUN set -ex; \
     wine wineboot --init; \
     /docker/waitonprocess.sh wineserver; \
     winetricks --unattended dotnet40; \
-    /docker/waitonprocess.sh wineserver; \
-    mkdir $MT4DIR
+    /docker/waitonprocess.sh wineserver
 
 USER root
 COPY run_mt.sh screenshot.sh /docker/
