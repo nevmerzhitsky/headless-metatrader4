@@ -49,7 +49,6 @@ RUN set -ex; \
     useradd -u $USER_ID -d $HOME -g $USER -ms /bin/bash $USER
 
 USER $USER
-WORKDIR $HOME
 
 ENV WINEARCH=win32 \
     WINEPREFIX=$HOME/.wine \
