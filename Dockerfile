@@ -21,8 +21,8 @@ RUN set -ex; \
         xvfb
 
 RUN set -ex; \
-    wget https://dl.winehq.org/wine-builds/Release.key; \
-    apt-key add Release.key; \
+    wget -nc https://dl.winehq.org/wine-builds/winehq.key; \
+    apt-key add winehq.key; \
     apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/; \
     DEBIAN_FRONTEND=noninteractive apt-get update -y; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --install-recommends \
