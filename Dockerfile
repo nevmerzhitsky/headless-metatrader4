@@ -27,7 +27,7 @@ RUN set -ex; \
     DEBIAN_FRONTEND=noninteractive apt-get update -y; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --install-recommends \
         winehq-stable; \
-    rm Release.key
+    rm winehq.key
 
 RUN set -ex; \
     wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks; \
